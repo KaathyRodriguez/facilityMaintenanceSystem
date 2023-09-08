@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.facilitymaintenancesystem.mapper.FeedbackMapper">
+
+    <resultMap id="pageBuilding" type="com.example.facilitymaintenancesystem.entity.Feedback">
+        <result column="number" property="number" />
+        <result column="type" property="type" />
+        <result column="topic" property="topic" />
+        <result column="content" property="content" />
+        <result column="person" property="person" />
+        <result column="telephone" property="telephone" />
+        <result column="createTime" property="createTime" />
+    </resultMap>
+
+    <select id="findPage" resultMap="pageBuilding">
+        select * from Feedback
+        <where>
+            <if test="number != null and number != ''">
+                and Feedback.number like concat('%', #{number} ,'%')
+            </if>
+            <if test="type != null and type != ''">
+                and Feedback.type like concat('%', #{type} ,'%')
+            </if>
+            <if test="topic != null and topic != ''">
+                and Feedback.topic like concat('%', #{topic} ,'%')
+            </if>
+            <if test="flag != null and flag != ''">
+                and Feedback.flag like concat('%', #{flag} ,'%')
+            </if>
+        </where>
+    </select>
+
+    <delete id="removeByNumber">
+        delete from Feedback where number = #{number}
+    </delete>
+
+    <delete id="removeByNumbers">
+        DELETE FROM Feedback
+        <where>
+            <if test="numbers!=null and numbers.size>0">
+                <foreach item="number" collection="numbers" open="number in(" separator="," close=")">
+                    #{number}
+                </foreach>
+            </if>
+        </where>
+    </delete>
+</mapper>

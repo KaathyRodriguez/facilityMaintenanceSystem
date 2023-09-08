@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.facilitymaintenancesystem.mapper.StaffMapper">
+
+    <resultMap id="pageStaff" type="com.example.facilitymaintenancesystem.entity.Staff">
+        <result column="number" property="number" />
+        <result column="name" property="name" />
+        <result column="telephone" property="telephone" />
+        <result column="email" property="email" />
+        <result column="createTime" property="createTime" />
+    </resultMap>
+
+    <select id="findPage" resultMap="pageStaff">
+        select * from Staff
+        <where>
+            <if test="number != null and number != ''">
+                and Staff.number like concat('%', #{number} ,'%')
+            </if>
+            <if test="name != null and name != ''">
+                and Staff.name like concat('%', #{name} ,'%')
+            </if>
+            <if test="createTime != null and createTime != ''">
+                and Staff.createTime like concat('%', #{createTime} ,'%')
+            </if>
+        </where>
+    </select>
+
+
+    <delete id="removeByNumber">
+        delete from Staff where number = #{number}
+    </delete>
+
+    <delete id="removeByNumbers">
+        DELETE FROM Staff
+        <where>
+            <if test="numbers!=null and numbers.size>0">
+                <foreach item="number" collection="numbers" open="number in(" separator="," close=")">
+                    #{number}
+                </foreach>
+            </if>
+        </where>
+    </delete>
+</mapper>

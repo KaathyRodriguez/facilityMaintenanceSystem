@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.facilitymaintenancesystem.mapper.RepairMapper">
+
+    <resultMap id="pageRepair" type="com.example.facilitymaintenancesystem.entity.Repair">
+        <result column="number" property="number" />
+        <result column="topic" property="topic" />
+        <result column="person" property="person" />
+        <result column="contactNumber" property="contactNumber" />
+        <result column="content" property="content" />
+        <result column="state" property="state" />
+        <result column="staffNo" property="staffNo" />
+        <result column="staffNumber" property="staffNumber" />
+        <result column="createTime" property="createTime" />
+    </resultMap>
+
+    <select id="findPage" resultMap="pageRepair">
+        select * from Repair
+        <where>
+            <if test="person != null and person != ''">
+                and Repair.person like concat('%', #{person} ,'%')
+            </if>
+            <if test="topic != null and topic != ''">
+                and Repair.topic like concat('%', #{topic} ,'%')
+            </if>
+            <if test="state != null and state != ''">
+                and Repair.state like concat('%', #{state} ,'%')
+            </if>
+            <if test="staffNo != null and staffNo != ''">
+                and Repair.staffNo like concat('%', #{staffNo} ,'%')
+            </if>
+            <if test="flag != null and flag != ''">
+                and Repair.flag like concat('%', #{flag} ,'%')
+            </if>
+        </where>
+    </select>
+
+    <delete id="removeByNumber">
+        delete from Repair where number = #{number}
+    </delete>
+
+    <delete id="removeByNumbers">
+        DELETE FROM Repair
+        <where>
+            <if test="numbers!=null and numbers.size>0">
+                <foreach item="number" collection="numbers" open="number in(" separator="," close=")">
+                    #{number}
+                </foreach>
+            </if>
+        </where>
+    </delete>
+
+
+</mapper>
+
